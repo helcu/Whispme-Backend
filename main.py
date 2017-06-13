@@ -172,7 +172,7 @@ api.add_resource(Authenticate, '/AuthenticateUser')
 api.add_resource(Followers, '/Followers/<userid>')
 api.add_resource(Whispers, '/Whispers/<whisp>')
 api.add_resource(WhispersPost, '/WhispersPost')
-api.add_resource(Test, '/test')
+api.add_resource(Test, '/')
 
 if __name__ == '__main__':
     app.run(debug=False)
