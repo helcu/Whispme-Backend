@@ -89,7 +89,7 @@ class Authenticate(Resource):
                 return {'status': 200, 'UserId': str(data[0][0])}
 
             else:
-                return {'status': 100, 'message': 'Authentication failure'}
+                return {'status': 203, 'UserId': 'no existe'}
 
         except Exception as e:
 
