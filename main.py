@@ -14,19 +14,19 @@ PORT = 5000
 ##                   resourcePath='/',
 ##                   produces=["application/json", "text/html"],
 ##                   api_spec_url='/api/spec',
-##                   description='A Basic API')
+##                  description='A Basic API')
 ###################################
 
 
 # Cadena de coneccion de la base de datos
 
-"""app.config['MYSQL_DATABASE_USER'] = 'root'
-app.config['MYSQL_DATABASE_PASSWORD'] = 'root'
-app.config['MYSQL_DATABASE_DB'] = 'DB_Whispme'
-app.config['MYSQL_DATABASE_HOST'] = 'localhost'
+app.config['MYSQL_DATABASE_USER'] = 'bf64964c115591'
+app.config['MYSQL_DATABASE_PASSWORD'] = '2f69db32'
+app.config['MYSQL_DATABASE_DB'] = 'heroku_c975115db73d434'
+app.config['MYSQL_DATABASE_HOST'] = 'us-cdbr-iron-east-03.cleardb.net'
 
 mysql.init_app(app)
-"""
+
 api = Api(app)
 
 
