@@ -7,17 +7,6 @@ mysql = MySQL()
 app = Flask(__name__)
 PORT = 5000
 
-###################################
-# Wrap the Api with swagger.docs. It is a thin wrapper around the Api class that adds some swagger smarts
-##api = swagger.docs(Api(app), apiVersion='0.1',
-##                   basePath='http://localhost:5000',
-##                   resourcePath='/',
-##                   produces=["application/json", "text/html"],
-##                   api_spec_url='/api/spec',
-##                  description='A Basic API')
-###################################
-
-
 # Cadena de coneccion de la base de datos
 
 app.config['MYSQL_DATABASE_USER'] = 'bf64964c115591'
@@ -102,27 +91,29 @@ class Test(Resource):
 
 class Followers(Resource):
 
-    def get(self,userid):
+    def get(self, userid):
+        try:
+            conn = mysql.connect()
+            cursor = conn.cursor()
 
+            cursor.callproc('WM_sp_GetFollowers', [userid,])
+            data = cursor.fetchall()
 
-        conn = mysql.connect()
-        cursor = conn.cursor()
+            items_list = []
 
-        cursor.callproc('WM_sp_GetFollowers', (userid))
-        data = cursor.fetchall()
+            for item in data:
+                i = {
+                    'IDUser': item[0],
+                    'UserName': item[1],
+                    'UrlPhoto': item[2],
+                    'Description': item[3],
+                }
+                items_list.append(i)
 
-        items_list = []
+            return {'StatusCode': '200', 'Items': items_list}
+        except Exception as e:
+            return {'StatusCode': '200', 'Items': str(e)}
 
-        for item in data:
-            i = {
-                'IDUser': item[0],
-                'UserName': item[1],
-                'UrlPhoto': item[2],
-                'Description': item[3],
-            }
-            items_list.append(i)
-
-        return {'StatusCode': '200', 'Items': items_list}
 
 class Whispers(Resource):
 
@@ -131,7 +122,7 @@ class Whispers(Resource):
         conn = mysql.connect()
         cursor = conn.cursor()
 
-        cursor.callproc('WM_sp_GetWhisper', (whisp))
+        cursor.callproc('WM_sp_GetWhisper', [whisp,])
 
         data = cursor.fetchall()
 
