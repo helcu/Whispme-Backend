@@ -98,7 +98,7 @@ class Authenticate(Resource):
 
 class Test(Resource):
     def get(self):
-        return {'mensaje':'prueba'}
+        return {'mensaje':'pruebaWindoes'}
 
 class Followers(Resource):
 
