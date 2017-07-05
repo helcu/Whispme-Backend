@@ -159,20 +159,76 @@ class WhispersPost(Resource):
         conn = mysql.connect()
         cursor = conn.cursor()
         cursor.callproc('WM_sp_PostWhisper', (args['idUser'], args['title'],args['dateCreation'],args['latitude'],args['longitude'],args['urlAudio'],args['place'],args['text'],args['urlPhoto']))
-        data = cursor.fetchall()
+        data = cursor.execute()
         conn.commit()
         return {'StatusCode': '200', 'Message': 'Whisp upload'}
 
 
+class WhispersDetail(Resource):
+    def get(self,whispId):
+        try:
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.callproc('WM_sp_GetWhisperDetail', [whispId,])
+            data = cursor.fetchall()
+            items_list = []
+
+            for item in data:
+                i = {
+                    'idWhisp': item[0],
+                    'idUser': item[1],
+                    'title': item[2],
+                    'dateCreation': str(item[3]),
+                    'latitude': item[4],
+                    'longitude': item[5],
+                    'urlAudio': item[6],
+                    'place': item[7],
+                    'text': item[8],
+                    'urlPhoto': item[9],
+                }
+                items_list.append(i)
+            return {'StatusCode': '200', 'Items': items_list}
+        except Exception as e:
+            return {'StatusCode': '200', 'Error': e}
 
 
-# Declaracion de la ruta y agregado al recurso
+class AccountDetail(Resource):
+    def get(self, whispId):
+        try:
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.callproc('WM_sp_GetWhisperDetail', [whispId, ])
+            data = cursor.fetchall()
+            items_list = []
+
+            for item in data:
+                i = {
+                    'idWhisp': item[0],
+                    'idUser': item[1],
+                    'title': item[2],
+                    'dateCreation': str(item[3]),
+                    'latitude': item[4],
+                    'longitude': item[5],
+                    'urlAudio': item[6],
+                    'place': item[7],
+                    'text': item[8],
+                    'urlPhoto': item[9],
+                }
+                items_list.append(i)
+            return {'StatusCode': '200', 'Items': items_list}
+        except Exception as e:
+            return {'StatusCode': '200', 'Error': e}
+
+#Declaracion de la ruta y agregado al recurso
 
 api.add_resource(CreateUser, '/CreateUser')
 api.add_resource(Authenticate, '/AuthenticateUser')
 api.add_resource(Followers, '/Followers/<userid>')
 api.add_resource(Whispers, '/Whispers')
 api.add_resource(WhispersPost, '/WhispersPost')
+api.add_resource(WhispersDetail, '/WhispersDeteail/<whispId>')
+api.add_resource(AccountDetail, '/AccountDetail/<userId>')
+
 api.add_resource(Test, '/')
 
 if __name__ == '__main__':
