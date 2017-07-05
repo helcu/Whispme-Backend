@@ -118,17 +118,30 @@ class Followers(Resource):
 class Whispers(Resource):
 
     def get(self, whisp):
+        try:
+            parser = reqparse.RequestParser()
+            parser.add_argument('latitude', type=float, help='latitude position')
+            parser.add_argument('longitude', type=float, help='longitude position ')
+            args = parser.parse_args()
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.callproc('WM_sp_GetWhisper', (args['latitude'],args['longitude']))
+            data = cursor.fetchall()
 
-        conn = mysql.connect()
-        cursor = conn.cursor()
+            items_list = []
 
-        cursor.callproc('WM_sp_GetWhisper', [whisp,])
+            for item in data:
+                i = {
+                    'IdWhisp': item[0],
+                    'Latitude': item[1],
+                    'Longitude': item[2],
+                    'Distance': item[3],
+                }
+                items_list.append(i)
 
-        data = cursor.fetchall()
-
-
-        #return {'idWhisp': str(data[0][0])}
-        return {'idWhisp': str(data[0][0]), 'idUser': str(data[0][1]), 'title': str(data[0][2]), 'dateCreation': str(data[0][3]), 'latitude': str(data[0][4]), 'longitude': str(data[0][5]), 'urlAudio': str(data[0][6]), 'place': str(data[0][7]), 'text': str(data[0][8]), 'urlPhoto': str(data[0][9])}
+            return {'StatusCode': '200', 'Items': items_list}
+        except Exception as e:
+            return {'StatusCode': '200', 'Error': e}
 class WhispersPost(Resource):
 
     def post(self):
@@ -161,7 +174,7 @@ class WhispersPost(Resource):
 api.add_resource(CreateUser, '/CreateUser')
 api.add_resource(Authenticate, '/AuthenticateUser')
 api.add_resource(Followers, '/Followers/<userid>')
-api.add_resource(Whispers, '/Whispers/<whisp>')
+api.add_resource(Whispers, '/Whispers')
 api.add_resource(WhispersPost, '/WhispersPost')
 api.add_resource(Test, '/')
 
