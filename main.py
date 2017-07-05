@@ -193,26 +193,26 @@ class WhispersDetail(Resource):
 
 
 class AccountDetail(Resource):
-    def get(self, whispId):
+    def get(self, userId):
         try:
             conn = mysql.connect()
             cursor = conn.cursor()
-            cursor.callproc('WM_sp_GetWhisperDetail', [whispId, ])
+            cursor.callproc('WM_sp_AccountDetail', [userId, ])
             data = cursor.fetchall()
             items_list = []
 
             for item in data:
                 i = {
-                    'idWhisp': item[0],
-                    'idUser': item[1],
-                    'title': item[2],
-                    'dateCreation': str(item[3]),
-                    'latitude': item[4],
-                    'longitude': item[5],
-                    'urlAudio': item[6],
-                    'place': item[7],
-                    'text': item[8],
-                    'urlPhoto': item[9],
+                    'idUser': item[0],
+                    'userName': item[1],
+                    'password': item[2],
+                    'Usercol': str(item[3]),
+                    'urlPhoto': item[4],
+                    'urlPhotoCover': item[5],
+                    'email': item[6],
+                    'description': item[7],
+                    'active': item[8],
+                    'premium': item[9],
                 }
                 items_list.append(i)
             return {'StatusCode': '200', 'Items': items_list}
