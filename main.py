@@ -117,7 +117,7 @@ class Followers(Resource):
 
 class Whispers(Resource):
 
-    def get(self, whisp):
+    def get(self):
         try:
             parser = reqparse.RequestParser()
             parser.add_argument('latitude', type=float, help='latitude position')
@@ -125,9 +125,8 @@ class Whispers(Resource):
             args = parser.parse_args()
             conn = mysql.connect()
             cursor = conn.cursor()
-            cursor.callproc('WM_sp_GetWhisper', (args['latitude'],args['longitude']))
+            cursor.callproc('WM_sp_GetWhisper', (args['latitude'], args['longitude']))
             data = cursor.fetchall()
-
             items_list = []
 
             for item in data:
@@ -145,8 +144,6 @@ class Whispers(Resource):
 class WhispersPost(Resource):
 
     def post(self):
-
-
         parser = reqparse.RequestParser()
         #parser.add_argument('idWhisp', type=str, help='Email address to create user')
         parser.add_argument('idUser', type=str, help='Password to create user')
