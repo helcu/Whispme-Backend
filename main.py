@@ -159,7 +159,7 @@ class WhispersPost(Resource):
         conn = mysql.connect()
         cursor = conn.cursor()
         cursor.callproc('WM_sp_PostWhisper', (args['idUser'], args['title'],args['dateCreation'],args['latitude'],args['longitude'],args['urlAudio'],args['place'],args['text'],args['urlPhoto']))
-        data = cursor.execute()
+        #data = cursor.execute()
         conn.commit()
         return {'StatusCode': '200', 'Message': 'Whisp upload'}
 
