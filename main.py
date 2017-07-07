@@ -54,7 +54,7 @@ class CreateUser(Resource):
             return {'error': str(e)}
         finally:
             cursor.close()
-            conn.close()
+            #conn.close()
 
 
 class Authenticate(Resource):
@@ -88,7 +88,7 @@ class Authenticate(Resource):
             return {'error': str(e)}
         finally:
             cursor.close()
-            conn.close()
+            #conn.close()
 
 
 class Test(Resource):
@@ -121,7 +121,7 @@ class Followers(Resource):
             return {'StatusCode': '200', 'Items': str(e)}
         finally:
             cursor.close()
-            conn.close()
+            #conn.close()
 
 
 class Whispers(Resource):
@@ -152,7 +152,7 @@ class Whispers(Resource):
             return {'StatusCode': '200', 'Error': e}
         finally:
             cursor.close()
-            conn.close()
+            #conn.close()
 
 
 class WhispersPost(Resource):
@@ -181,7 +181,7 @@ class WhispersPost(Resource):
             return {'StatusCode': '200', 'Message': 'error'}
         finally:
             cursor.close()
-            conn.close()
+            #conn.close()
 
 class WhispersDetail(Resource):
     def get(self,whispId):
@@ -211,7 +211,7 @@ class WhispersDetail(Resource):
             return {'StatusCode': '200', 'Error': e}
         finally:
             cursor.close()
-            conn.close()
+            #conn.close()
 
 
 class AccountDetail(Resource):
@@ -242,7 +242,7 @@ class AccountDetail(Resource):
             return {'StatusCode': '200', 'Error': e}
         finally:
             cursor.close()
-            conn.close()
+            #conn.close()
 
 #Declaracion de la ruta y agregado al recurso
 
