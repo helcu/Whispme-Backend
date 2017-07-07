@@ -34,7 +34,7 @@ class CreateUser(Resource):
             _userEmail = args['email']
             _userPassword = args['password']
             _userName = args['user_name']
-
+            mysql.init_app(app)
             conn = mysql.connect()
             cursor = conn.cursor()
 
@@ -54,7 +54,7 @@ class CreateUser(Resource):
             return {'error': str(e)}
         finally:
             cursor.close()
-            #conn.close()
+            conn.close()
 
 
 class Authenticate(Resource):
@@ -70,7 +70,7 @@ class Authenticate(Resource):
             args = parser.parse_args()
             _userPassword = args['password']
             _userName = args['user_name']
-
+            mysql.init_app(app)
             conn = mysql.connect()
             cursor = conn.cursor()
             cursor.callproc('WM_sp_Authenticate', (_userName, _userPassword))
@@ -88,7 +88,7 @@ class Authenticate(Resource):
             return {'error': str(e)}
         finally:
             cursor.close()
-            #conn.close()
+            conn.close()
 
 
 class Test(Resource):
@@ -99,6 +99,7 @@ class Followers(Resource):
 
     def get(self, userid):
         try:
+            mysql.init_app(app)
             conn = mysql.connect()
             cursor = conn.cursor()
 
@@ -121,7 +122,7 @@ class Followers(Resource):
             return {'StatusCode': '200', 'Items': str(e)}
         finally:
             cursor.close()
-            #conn.close()
+            conn.close()
 
 
 class Whispers(Resource):
@@ -132,6 +133,7 @@ class Whispers(Resource):
             parser.add_argument('latitude', type=float, help='latitude position')
             parser.add_argument('longitude', type=float, help='longitude position ')
             args = parser.parse_args()
+            mysql.init_app(app)
             conn = mysql.connect()
             cursor = conn.cursor()
             cursor.callproc('WM_sp_GetWhisper', (args['latitude'], args['longitude']))
@@ -152,7 +154,7 @@ class Whispers(Resource):
             return {'StatusCode': '200', 'Error': e}
         finally:
             cursor.close()
-            #conn.close()
+            conn.close()
 
 
 class WhispersPost(Resource):
@@ -171,6 +173,7 @@ class WhispersPost(Resource):
             parser.add_argument('text', type=str, help='user name to create user')
             parser.add_argument('urlPhoto', type=str, help='user name to create user')
             args = parser.parse_args()
+            mysql.init_app(app)
             conn = mysql.connect()
             cursor = conn.cursor()
             cursor.callproc('WM_sp_PostWhisper', (args['idUser'], args['title'],args['dateCreation'],args['latitude'],args['longitude'],args['urlAudio'],args['place'],args['text'],args['urlPhoto']))
@@ -181,11 +184,12 @@ class WhispersPost(Resource):
             return {'StatusCode': '200', 'Message': 'error'}
         finally:
             cursor.close()
-            #conn.close()
+            conn.close()
 
 class WhispersDetail(Resource):
     def get(self,whispId):
         try:
+            mysql.init_app(app)
             conn = mysql.connect()
             cursor = conn.cursor()
             cursor.callproc('WM_sp_GetWhisperDetail', [whispId,])
@@ -211,12 +215,13 @@ class WhispersDetail(Resource):
             return {'StatusCode': '200', 'Error': e}
         finally:
             cursor.close()
-            #conn.close()
+            conn.close()
 
 
 class AccountDetail(Resource):
     def get(self, userId):
         try:
+            mysql.init_app(app)
             conn = mysql.connect()
             cursor = conn.cursor()
             cursor.callproc('WM_sp_AccountDetail', [userId, ])
@@ -242,7 +247,7 @@ class AccountDetail(Resource):
             return {'StatusCode': '200', 'Error': e}
         finally:
             cursor.close()
-            #conn.close()
+            conn.close()
 
 #Declaracion de la ruta y agregado al recurso
 
