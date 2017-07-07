@@ -249,6 +249,31 @@ class AccountDetail(Resource):
             cursor.close()
             conn.close()
 
+
+class TopFollowed(Resource):
+   def get(self):
+        try:
+            mysql.init_app(app)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.callproc('WM_sp_TopFollowed')
+            data = cursor.fetchall()
+            items_list = []
+
+            for item in data:
+                i = {
+                    'idFollowed': item[0],
+                    'total': item[1],
+                    'userName': item[2]
+                }
+                items_list.append(i)
+            return {'StatusCode': '200', 'Items': items_list}
+        except Exception as e:
+            return {'StatusCode': '200', 'Error': e}
+        finally:
+            cursor.close()
+            conn.close()
+
 #Declaracion de la ruta y agregado al recurso
 
 api.add_resource(CreateUser, '/CreateUser')
@@ -258,6 +283,7 @@ api.add_resource(Whispers, '/Whispers')
 api.add_resource(WhispersPost, '/WhispersPost')
 api.add_resource(WhispersDetail, '/WhispersDeteail/<whispId>')
 api.add_resource(AccountDetail, '/AccountDetail/<userId>')
+api.add_resource(TopFollowed, '/TopFollowed')
 
 api.add_resource(Test, '/')
 
