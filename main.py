@@ -52,6 +52,9 @@ class CreateUser(Resource):
         except Exception as e:
 
             return {'error': str(e)}
+        finally:
+            cursor.close()
+            conn.close()
 
 
 class Authenticate(Resource):
@@ -83,6 +86,9 @@ class Authenticate(Resource):
         except Exception as e:
 
             return {'error': str(e)}
+        finally:
+            cursor.close()
+            conn.close()
 
 
 class Test(Resource):
@@ -113,6 +119,9 @@ class Followers(Resource):
             return {'StatusCode': '200', 'Items': items_list}
         except Exception as e:
             return {'StatusCode': '200', 'Items': str(e)}
+        finally:
+            cursor.close()
+            conn.close()
 
 
 class Whispers(Resource):
@@ -141,28 +150,38 @@ class Whispers(Resource):
             return {'StatusCode': '200', 'Items': items_list}
         except Exception as e:
             return {'StatusCode': '200', 'Error': e}
+        finally:
+            cursor.close()
+            conn.close()
+
+
 class WhispersPost(Resource):
 
     def post(self):
-        parser = reqparse.RequestParser()
-        #parser.add_argument('idWhisp', type=str, help='Email address to create user')
-        parser.add_argument('idUser', type=str, help='Password to create user')
-        parser.add_argument('title', type=str, help='user name to create user')
-        parser.add_argument('dateCreation', type=str, help='user name to create user')
-        parser.add_argument('latitude', type=float, help='user name to create user')
-        parser.add_argument('longitude', type=float, help='user name to create user')
-        parser.add_argument('urlAudio', type=str, help='user name to create user')
-        parser.add_argument('place', type=str, help='user name to create user')
-        parser.add_argument('text', type=str, help='user name to create user')
-        parser.add_argument('urlPhoto', type=str, help='user name to create user')
-        args = parser.parse_args()
-        conn = mysql.connect()
-        cursor = conn.cursor()
-        cursor.callproc('WM_sp_PostWhisper', (args['idUser'], args['title'],args['dateCreation'],args['latitude'],args['longitude'],args['urlAudio'],args['place'],args['text'],args['urlPhoto']))
-        #data = cursor.execute()
-        conn.commit()
-        return {'StatusCode': '200', 'Message': 'Whisp upload'}
-
+        try:
+            parser = reqparse.RequestParser()
+            #parser.add_argument('idWhisp', type=str, help='Email address to create user')
+            parser.add_argument('idUser', type=str, help='Password to create user')
+            parser.add_argument('title', type=str, help='user name to create user')
+            parser.add_argument('dateCreation', type=str, help='user name to create user')
+            parser.add_argument('latitude', type=float, help='user name to create user')
+            parser.add_argument('longitude', type=float, help='user name to create user')
+            parser.add_argument('urlAudio', type=str, help='user name to create user')
+            parser.add_argument('place', type=str, help='user name to create user')
+            parser.add_argument('text', type=str, help='user name to create user')
+            parser.add_argument('urlPhoto', type=str, help='user name to create user')
+            args = parser.parse_args()
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.callproc('WM_sp_PostWhisper', (args['idUser'], args['title'],args['dateCreation'],args['latitude'],args['longitude'],args['urlAudio'],args['place'],args['text'],args['urlPhoto']))
+            #data = cursor.execute()
+            conn.commit()
+            return {'StatusCode': '200', 'Message': 'Whisp upload'}
+        except Exception as e:
+            return {'StatusCode': '200', 'Message': 'error'}
+        finally:
+            cursor.close()
+            conn.close()
 
 class WhispersDetail(Resource):
     def get(self,whispId):
@@ -190,6 +209,9 @@ class WhispersDetail(Resource):
             return {'StatusCode': '200', 'Items': items_list}
         except Exception as e:
             return {'StatusCode': '200', 'Error': e}
+        finally:
+            cursor.close()
+            conn.close()
 
 
 class AccountDetail(Resource):
@@ -218,6 +240,9 @@ class AccountDetail(Resource):
             return {'StatusCode': '200', 'Items': items_list}
         except Exception as e:
             return {'StatusCode': '200', 'Error': e}
+        finally:
+            cursor.close()
+            conn.close()
 
 #Declaracion de la ruta y agregado al recurso
 
